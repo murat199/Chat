@@ -1,0 +1,660 @@
+<html>
+  <head>
+    <title>File upload Node.</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <style type="text/css">
+      body{
+        font-family: 'Roboto', sans-serif;
+        background: #f79d00;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #64f38c, #f79d00);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #64f38c, #f79d00);
+      }
+      #PageChat{display:none;font-weight: 100}
+      .box-login{
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -200px;
+        margin-top: -76px;
+        max-width: 400px;
+        width: 100%
+      }
+      .box-login #userNickname{
+        display: block;
+        margin:0 auto;
+        border-radius: 20px;
+        border: none;
+        padding: 10px 3px;
+        width: 100%;
+        text-indent: 11px;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        font-weight: 200;
+      }
+      .box-login #userNickname:focus{
+        outline:none 
+      }
+
+      .box-login .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%
+      }
+
+      .box-login .upload-btn-wrapper input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        z-index: 1;
+        cursor: pointer;
+      }
+      .btn-danger {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #28a745;
+        background-color: transparent;
+        background-image: none;
+        border-color: #28a745;
+        cursor: pointer;
+        width: 100%;
+        z-index: 3;
+      }
+      .btn-danger:hover{
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+      .box-login .btnUpload {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #28a745;
+        background-color: transparent;
+        background-image: none;
+        border-color: #28a745;
+        cursor: pointer;
+        width: 100%;
+        z-index: 3;
+      }
+      .box-login .btnUpload:hover{
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+
+      .box-login #btnSubmit{
+        margin: 0 auto;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 200;
+        margin-top: 20px;
+      }
+      .person .count{
+        background: red;
+        color: #fff;
+        padding: 1px 6px;
+        border-radius: 100%;
+        margin-left: 8px;
+        font-weight: 900;
+      }
+      .box-login #btnSubmit:hover {
+          color: #fff;
+          background-color: #0069d9;
+          border-color: #0062cc;
+      }
+      .container .left .people .person{
+        min-height: 74px;
+      }
+      .btnRequestSend{
+        margin: 0 auto;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 200;
+        margin-top: 20px;
+        display: none;
+        margin-top: 0px;
+      }
+      .btnRequestAccept{
+        margin: 0 auto;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 200;
+        margin-top: 20px;
+        display: none;
+        margin-top: 0px;
+      }
+      .btnRequestAcceptNo{
+        margin: 0 auto;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: red;
+        border-color: red;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 200;
+        margin-top: 20px;
+        display: none;
+        margin-top: 0px;
+      }
+      .container .right .write .write-link.send img{
+        width: 40px;
+        float: right;
+      }
+      .container .right .write .write-link.send:before{
+        float: right;
+        width: 0px;
+        height: 0px;    
+      }
+      #btnConnect{
+        display: none;
+        margin: 0 auto;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        cursor: pointer;
+        font-weight: 200;
+        float: right;
+        margin-top: 10px;
+      }
+      #btnDisConnect{
+        margin: 0 auto;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        color: #fff;
+        background-color: red;
+        border-color: red;
+        cursor: pointer;
+        font-weight: 200;
+        float: right;
+        margin-top: 10px;
+      }
+      .top h3{display: inline-block;}
+
+      @import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600";*,:before,:after{-webkit-box-sizing:border-box;box-sizing:border-box}body{background-color:#f8f8f8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-weight:400;}.wrapper{position:relative;left:50%;width:1000px;height:800px;-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}.container{position:relative;top:50%;left:50%;width:80%;height:75%;background-color:#fff;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.container .left{float:left;width:37.6%;height:100%;border:1px solid #e6e6e6;background-color:#fff}.container .left .top{position:relative;width:100%;padding:0 29px}.container .left .top:after{position:absolute;bottom:0;left:50%;display:block;width:80%;height:1px;content:'';background-color:#e6e6e6;-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}.container .left input{float:left;width:188px;height:42px;padding:0 15px;border:1px solid #e6e6e6;background-color:#eceff1;border-radius:21px;font-family:'Source Sans Pro',sans-serif;font-weight:400}.container .left input:focus{outline:none}.container .left a.search{display:block;float:left;width:42px;height:42px;margin-left:10px;border:1px solid #e6e6e6;background-color:#00b0ff;background-image:url(https://s11.postimg.org/dpuahewmn/name_type.png);background-repeat:no-repeat;background-position:top 12px left 14px;border-radius:50%}.container .left .people{list-style:none;margin-left:-40px}.container .left .people .person{position:relative;width:100%;padding:12px 10% 16px;cursor:pointer;background-color:#fff}.container .left .people .person:after{position:absolute;bottom:0;left:50%;display:block;width:80%;height:1px;content:'';background-color:#e6e6e6;-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}.container .left .people .person img{float:left;width:40px;height:40px;margin-right:12px;border-radius:50%}.container .left .people .person .name{font-size:14px;line-height:22px;color:#1a1a1a;font-family:'Source Sans Pro',sans-serif;font-weight:600}.container .left .people .person .time{font-size:14px;position:absolute;top:16px;right:10%;padding:0 0 5px 5px;color:#999;background-color:#fff}.container .left .people .person .preview{font-size:14px;display:inline-block;overflow:hidden!important;width:70%;white-space:nowrap;text-overflow:ellipsis;color:#999}.container .left .people .person.active,.container .left .people .person:hover{margin-top:-1px;margin-left:-1px;padding-top:13px;border:0;background-color:#00b0ff;width:calc(100% + 2px);padding-left:calc(10% + 1px)}.container .left .people .person.active span,.container .left .people .person:hover span{color:#fff;background:transparent}.container .left .people .person.active:after,.container .left .people .person:hover:after{display:none}.container .right{position:relative;float:left;width:62.4%;height:100%}.container .right .top{width:100%;height:47px;padding:15px 29px;background-color:#eceff1}.container .right .top span{font-size:15px;color:#999}.container .right .top span .name{color:#1a1a1a;font-family:'Source Sans Pro',sans-serif;font-weight:600}.container .right .chat{position:relative;display:none;overflow:hidden;padding:0 35px 92px;border-width:1px 1px 1px 0;border-style:solid;border-color:#e6e6e6;height:calc(100% - 48px);-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.container .right .chat.active-chat{display:block;display:-webkit-box;display:-ms-flexbox;display:flex}.container .right .chat.active-chat .bubble{-webkit-transition-timing-function:cubic-bezier(0.4,-0.04,1,1);transition-timing-function:cubic-bezier(0.4,-0.04,1,1)}.container .right .chat.active-chat .bubble:nth-of-type(1){-webkit-animation-duration:.15s;animation-duration:.15s}.container .right .chat.active-chat .bubble:nth-of-type(2){-webkit-animation-duration:.3s;animation-duration:.3s}.container .right .chat.active-chat .bubble:nth-of-type(3){-webkit-animation-duration:.45s;animation-duration:.45s}.container .right .chat.active-chat .bubble:nth-of-type(4){-webkit-animation-duration:.6s;animation-duration:.6s}.container .right .chat.active-chat .bubble:nth-of-type(5){-webkit-animation-duration:.75s;animation-duration:.75s}.container .right .chat.active-chat .bubble:nth-of-type(6){-webkit-animation-duration:.9s;animation-duration:.9s}.container .right .chat.active-chat .bubble:nth-of-type(7){-webkit-animation-duration:1.05s;animation-duration:1.05s}.container .right .chat.active-chat .bubble:nth-of-type(8){-webkit-animation-duration:1.2s;animation-duration:1.2s}.container .right .chat.active-chat .bubble:nth-of-type(9){-webkit-animation-duration:1.35s;animation-duration:1.35s}.container .right .chat.active-chat .bubble:nth-of-type(10){-webkit-animation-duration:1.5s;animation-duration:1.5s}.container .right .write{position:absolute;bottom:29px;left:30px;height:42px;padding-left:8px;border:1px solid #e6e6e6;background-color:#eceff1;width:calc(100% - 58px);border-radius:5px}.container .right .write input{font-size:16px;float:left;width:347px;height:40px;padding:0 10px;color:#1a1a1a;border:0;outline:none;background-color:#eceff1;font-family:'Source Sans Pro',sans-serif;font-weight:400}.container .right .write .write-link.attach:before{display:inline-block;float:left;width:20px;height:42px;content:'';background-image:url(https://s1.postimg.org/s5gfy283f/attachemnt.png);background-repeat:no-repeat;background-position:center}.container .right .write .write-link.smiley:before{display:inline-block;float:left;width:20px;height:42px;content:'';background-image:url(https://s14.postimg.org/q2ug83h7h/smiley.png);background-repeat:no-repeat;background-position:center}.container .right .write .write-link.send:before{display:inline-block;float:left;width:20px;height:42px;margin-left:11px;content:'';background-repeat:no-repeat;background-position:center}.container .right .bubble{font-size:16px;position:relative;display:inline-block;clear:both;margin-bottom:8px;padding:13px 14px;vertical-align:top;border-radius:5px}.container .right .bubble:before{position:absolute;top:19px;display:block;width:8px;height:6px;content:'\00a0';-webkit-transform:rotate(29deg) skew(-35deg);transform:rotate(29deg) skew(-35deg)}.container .right .bubble.you{float:left;color:#fff;background-color:#00b0ff;-ms-flex-item-align:start;align-self:flex-start;-webkit-animation-name:slideFromLeft;animation-name:slideFromLeft}.container .right .bubble.you:before{left:-3px;background-color:#00b0ff}.container .right .bubble.me{float:right;color:#1a1a1a;background-color:#eceff1;-ms-flex-item-align:end;align-self:flex-end;-webkit-animation-name:slideFromRight;animation-name:slideFromRight}.container .right .bubble.me:before{right:-3px;background-color:#eceff1}.container .right .conversation-start{position:relative;width:100%;margin-bottom:27px;text-align:center}.container .right .conversation-start span{font-size:14px;display:inline-block;color:#999}.container .right .conversation-start span:before,.container .right .conversation-start span:after{position:absolute;top:10px;display:inline-block;width:30%;height:1px;content:'';background-color:#e6e6e6}.container .right .conversation-start span:before{left:0}.container .right .conversation-start span:after{right:0}@keyframes slideFromLeft{0%{margin-left:-200px;opacity:0}100%{margin-left:0;opacity:1}}@-webkit-keyframes slideFromLeft{0%{margin-left:-200px;opacity:0}100%{margin-left:0;opacity:1}}@keyframes slideFromRight{0%{margin-right:-200px;opacity:0}100%{margin-right:0;opacity:1}}@-webkit-keyframes slideFromRight{0%{margin-right:-200px;opacity:0}100%{margin-right:0;opacity:1}}
+
+        @media(max-width: 400px) {
+          .box-login {
+              text-align: center;
+              position: absolute;
+              top: 50%;
+              left: auto;
+              margin-left: auto;
+              padding-right: 20px
+          }
+        }
+    </style>
+  </head>
+  <body>
+    <!--   -->
+    <form id="uploadForm" enctype="multipart/form-data" action="/api/photo" method="post">
+      <div class="box-login">
+        <input type="text" name="userNickname" id="userNickname" placeholder="Nickname" />
+        <input type="hidden" id="userId" name="userId"/>
+        <input type="hidden" id="userPhotoName" name="userPhotoName"/>
+        <div class="upload-btn-wrapper">
+          <button class="btnUpload">Resim Yükle</button>
+          <input type="file" id="userPhoto" name="userPhoto"/>
+        </div>
+        <input type="submit" value="GİRİŞ YAP" id="btnSubmit" name="submit">
+        <span id = "status"></span>
+      </div>
+    </form>
+    <div id="PageChat">
+      <div class="wrapper">
+        <div class="container">
+            <div class="left">
+                <div class="top">
+                    <h3>Kişiler</h3>
+                    <button id="btnConnect">Çevrimiçi Ol</button>
+                    <button id="btnDisConnect">Çevrimdışı Ol</button>
+                </div>
+                <ul class="people">
+                </ul>
+            </div>
+            <div class="right">
+                <div class="top"><span>Kullanıcı: <span class="name" id="fromUsername">Dog Woofson</span></span></div>
+                <div class="chat viewChat active-chat">
+                    <div class="conversation-start">
+                        <span>Today</span>
+                    </div>
+                </div>
+                <button class="btn btn-danger btnRequestSend">İSTEK GÖNDER</button>
+                <button class="btn btn-success btnRequestAccept">ONAYLA</button>
+                <button class="btn btn-success btnRequestAcceptNo">REDDET</button>
+                <div class="write">
+                    <input type="text" id="txtMessage" />
+                    <a href="javascript:;" id="btnSendMessage" class="write-link send">
+                      <img src="data:image/png;base64,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" />
+                    </a>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  <script>
+    var chat=[];
+    var users=[];
+    var userMessage={};
+    var user={};
+    var socket = io();
+    var chatMessage;
+    var toUserId;
+    var requestAccepts='';
+    var requestSends='';
+    var requestRefuse='';
+    var messageCountList=[];
+ 
+    $(document).ready(function() {
+      IsUsersOnline();
+      $("#userNickname").focus();
+      socket.on('UpdateUsers', function(msg){
+          console.log("**************"+users.length);
+          users=[];
+          $('.people .person').remove();
+          for(var key in msg){
+            users.push(msg[key]);
+            if(msg[key].number==user.number){
+                user=msg[key];
+            }
+            if(msg[key].number!=JSON.parse(user).number){
+              var liTag=$('<li>').addClass('person').addClass('person'+(msg[key].number)).attr('data-user-id', ''+(msg[key].number));
+              var img=$('<img>').attr("src",""+msg[key].img);
+              var spanName=$('<span>').addClass('name').text(msg[key].nickname);
+              var spanCount=$('<span>').addClass('count').text("0").val(0).css("display","none");
+              if(messageCountList[key]!=null && messageCountList[key]!=0){
+                spanCount.text(""+messageCountList[key]).css("display","inline-block");
+              }
+              var spanTime;
+              if(msg[key].isOnline){
+                if(toUserId==msg[key].number){
+                  
+                }
+                spanTime=$('<span>').addClass('time').text("Çevrimiçi").css("color","green");
+              }else{
+                if(toUserId==msg[key].number){
+                  $(".write").css("display","none");
+                }
+                spanTime=$('<span>').addClass('time').text("Çevrimdışı").css("color","red").css("font-weight","600");
+              }
+              liTag.append(img);
+              liTag.append(spanName);
+              liTag.append(spanCount);
+              liTag.append(spanTime);
+              $('.people').append(liTag);
+            }
+          }
+          $('.person'+toUserId).addClass('active');
+      });
+            
+      socket.on('UpdateChatView', function(obj){
+        chat.push(obj);
+        chatMessage=obj;
+        var chatUser=JSON.parse(chatMessage.fromUser);
+        UpdateChatView(chatMessage,chatUser);
+      });
+      socket.on('UpdateChatToView', function(obj){
+        chat.push(obj);
+        chatMessage=obj;
+        var chatUser=JSON.parse(chatMessage.fromUser);
+        UpdateChatView(chatMessage,chatUser);
+        UpdateMessageCount(chatMessage,chatUser);
+      });
+      socket.on('UpdateRequest',function(obj){
+        alert("Kullanıcı isteği geldi.");
+        requestSends+=obj.fromUserId;
+      });
+      socket.on('UpdateRequestResponse',function(obj){
+        users=obj;
+        $(".btnRequestAccept").css("display","none");
+        $(".btnRequestSend").css("display","none");
+        $(".btnRequestAcceptNo").css("display","none");
+        $(".write").css("display","block");
+        $("#txtMessage").focus();
+      });
+      socket.on('UpdateRequestResponseYes',function(obj){
+        users=obj;
+        $(".btnRequestAccept").css("display","none");
+        $(".btnRequestSend").css("display","none");
+        $(".btnRequestAcceptNo").css("display","none");
+        $(".write").css("display","block");
+        $("#txtMessage").focus();
+        alert("İsteğiniz kullanıcı tarafından kabul edildi.");
+      });
+      socket.on('UpdateRequestResponseNo',function(obj){
+        requestRefuse+=obj.fromUserId;
+        $(".btnRequestAccept").css("display","none");
+        $(".btnRequestSend").css("display","none");
+        $(".btnRequestAcceptNo").css("display","none");
+        alert("isteğiniz kullanıcı tarafından reddedildi...");
+      });
+      socket.on('UpdateUserStatus',function(obj){
+        alert("isOnline:"+JSON.parse(user).isOnline);
+        user = obj;
+      });
+      $(document).on('click',".people .person",function(){
+        $(".write").css("display","none");
+        $(".btnRequestAccept").css("display","none");
+        $(".btnRequestSend").css("display","none");
+        $(".btnRequestAcceptNo").css("display","none");
+        $(".person").removeClass('active');
+        $(this).addClass('active');
+        toUserId=$(this).attr("data-user-id");
+        messageCountList[toUserId]=0;
+        if(!users[toUserId].isOnline){
+          alert("kullanıcı çevrimdışı");
+        }else if(!users[JSON.parse(user).number].isOnline){
+          alert("Çevrimiçi olmalısınız...");
+        }
+        else{
+          $(".bubble").remove();
+          var number=JSON.parse(user).number;
+          if(users[number].accepts.indexOf(toUserId)!=-1){
+            for(var key in chat){
+              chatMessage=chat[key];
+              var chatUser=JSON.parse(chatMessage.fromUser);
+              UpdateChatView(chatMessage,chatUser);
+            }
+            var li=$(".person"+toUserId);
+            var spanCount=li.find('.count');
+            spanCount.html("0").css("display","none");
+            $(".write").css("display","block");
+            $("#txtMessage").focus();
+          }else{
+            $(".write").css("display","none");
+            if(requestRefuse.indexOf(toUserId)==-1){
+              if(requestAccepts.indexOf(toUserId)==-1){
+                $(".btnRequestAccept").css("display","none");
+                $(".btnRequestAcceptNo").css("display","none");
+                $(".btnRequestSend").css("display","block");
+              }
+              if(requestSends.indexOf(toUserId)!=-1){
+                $(".btnRequestSend").css("display","none");
+                $(".btnRequestAccept").css("display","block");
+                $(".btnRequestAcceptNo").css("display","block");
+              }
+            }
+          }
+        }
+      });
+      $(".btnRequestSend").click(function(){
+        console.log("ToUserId : "+toUserId);
+        console.log("FromUserId : "+JSON.parse(user).number);
+        alert("İsteğiniz karşı tarafa iletildi.");
+        var obj={
+          toUserId:toUserId,
+          fromUserId:JSON.parse(user).number
+        };
+        socket.emit('requestAccept',obj);
+      });
+      $(".btnRequestAccept").click(function(){
+        var obj={
+          toUserId:toUserId,
+          fromUserId:JSON.parse(user).number,
+          status:true
+        };
+        socket.emit('requestAcceptResponse',obj);
+      });
+      $(".btnRequestAcceptNo").click(function(){
+        $(".btnRequestAccept").css("display","none");
+        $(".btnRequestSend").css("display","none");
+        $(".btnRequestAcceptNo").css("display","none");
+        var obj={
+          toUserId:toUserId,
+          fromUserId:JSON.parse(user).number,
+          status:false
+        };
+        socket.emit('requestAcceptResponse',obj);
+      });
+      $("#btnSendMessage").click(function() {
+          SendMessage();
+      });
+      $("#txtMessage").keydown(function (e) {
+          if (e.keyCode == 13) {
+              SendMessage();
+          }
+      });
+      $('#uploadForm').submit(function() {
+        SetUserId();
+        if(document.getElementById("userPhoto").files.length == 0){
+          $("#userPhotoName").val("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAUVBMVEX19fWFeXuDdnjs6+r7+/v///99cHL4+Ph6bW/x8PCAc3Xm5OSIfH7OysuLgILLxseYj5GooKHX1NS9t7izrK3c2tqelJaRhoh2aGujmpzDvr8c3UI0AAACuElEQVRoge2a25KjIBBABRtQ8H43//+hi5rJZBKVDdDOVi3nMS+nGpqmaRNFgUAgEAgEAoFA4PcQoBHXS1PV5HmjUnGlnEXlnEm+kA23lF2khrTjCSV3KJ9qxS7xNkSSH0h6E/hBs+472gdJjW0WUPE3rYYXyGbR7Xr1cg+oXtYm+1692h1ihon+IN51tXNAE7PxPa8eUIImhn469urFLrHMMJ8ErBmRvCI+9xLe44QM5WFK38UtTmKzWp6L6YAUcWVYalKgeKNoNHhJFqN408IkJgqlYP/TYgxvJMzJlaKIwXicKpw7mbUnd9MCR7oZhTJEnDRIt4Rpk5G22FiseYd2IbPsLOQEr9+D/GSX+Q2x6WL1YWLLCq/lipb8OoiZFilqYy2iYtdMqUINeHmxjTurzTNsr45ZF7CXoKl+OqF7o6XLHeSTWsqquehxDqKv5cS5lDyZZNWv4SK/2ZiKVwsDlbdd15YK1nkARAozakg7Wdyb53X2cp++COhHXsd4FbPPOKGyg5cSxaCllEjaIN2K0G1PJy7blH0trAAWt3Q7YRPKXEDA/HWAqczqXG13YFzWOtZH2fSfY0/eVcF5No5VNdLk+VBz/2YY3gsW1bz8JEfPZuO76WEevGYY5KdP8mcSn09GUIb+8ofZZ8t3dAvvQf31fOz2QcB6m2tPiy1SwyTglcnT2w2OpnlH0NnLLhtnLu9IL1MY9mnAWjz72OW/eBa/42GXIf84YB2yhypyOr88glJn8cdnaSNxXmvIrcS8dc1r4/xhHw9TCZucXsyOszbj+OEI7nhHsdLiMK1ixwNlUbY2pGO9htlyqenoll3CpnysZG7tgFWh3nArIcraK3sXsVC2K02k0/cv0Vvmlj5PTl+hRGMvvrmJObXELWLdcFlz9R8mAoFAIBAIBAKB/5Hf6rv/ANADHnvvEZnbAAAAAElFTkSuQmCC");
+        }else{
+          $("#userPhotoName").val("http://10.40.198.197:3000/uploads/"+$("#userId").val()+".png");
+        }
+        $("#status").empty().text("File is uploading...");
+        $(this).ajaxSubmit({
+          error: function(xhr) {
+            status('Error: ' + xhr.status);
+          },
+          success: function(response) {
+            $("#status").empty().text(response);
+            console.log(response);
+            user=response;
+            $("#fromUsername").text(JSON.parse(response).nickname);
+            RoutePage();
+            socket.emit('NewUser',user);
+          }
+        });
+        return false;
+      });
+      $("#userPhoto").hover(function(){
+        $(".btnUpload").css("color","#fff").css("background","#28a745").css("border-color","#28a745");
+      });
+      $("#userPhoto").mouseout(function(){
+        $(".btnUpload").css("color","#28a745").css("background","transparent").css("border-color","#28a745");
+      });
+      $('#userPhoto').change(function() {
+        var filename = $('#userPhoto').val();
+        $(".btnUpload").text(filename);
+      });
+      $('#btnConnect').click(function(){
+        $(this).toggle();
+        $("#btnDisConnect").toggle();
+        socket.emit('UserDoConnect',JSON.parse(user).number);
+      });
+      $('#btnDisConnect').click(function(){
+        $(this).toggle();
+        $("#btnConnect").toggle();
+        socket.emit('UserDoDisConnect',JSON.parse(user).number);
+        $(".write").css("display","none");
+      });
+    });
+    function SetUserId(){
+      $("#userId").val(GetGuid());
+    }
+    function RoutePage(){
+      $("#uploadForm").remove();
+      $("#PageChat").css("display","block");
+      $(".write").css("display","none");
+    }
+    function GetGuid() {
+        return 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+    function SendMessage(){
+      var message = $("#txtMessage").val();
+      var userMessage2={};
+      userMessage2.fromUser=user;
+      userMessage2.toUserId=toUserId;
+      userMessage2.message=message;
+      console.log(userMessage2);
+      socket.emit('NewMessage', userMessage2);
+      $("#txtMessage").focus();
+      $("#txtMessage").val("");
+    }
+    function IsChatView(){
+      if(parseInt(toUserId)==JSON.parse(chatMessage.fromUser).number){
+        if(parseInt(chatMessage.toUserId)==JSON.parse(user).number){
+          return true;
+        }
+      }else if(parseInt(toUserId)==parseInt(chatMessage.toUserId)){
+        if(JSON.parse(chatMessage.fromUser).number==JSON.parse(user).number){
+          return true;  
+        }
+      }else{
+        return false;
+      }
+    }
+    function UpdateChatView(chatMessage2,chatUser){
+      if(IsChatView()){
+        if(parseInt(chatMessage2.toUserId)!=JSON.parse(user).number){
+          $(".chat.viewChat.active-chat").append('<div class="bubble me" style="">'+chatUser.nickname+': '+chatMessage2.message+'</div>');
+          $("head").append('<style></style>');
+        }else{
+          $(".chat.viewChat.active-chat").append('<div class="bubble you" style="">'+chatUser.nickname+': '+chatMessage2.message+'</div>');
+          $("head").append('<style></style>');  
+        }
+      }
+    }
+    function UpdateMessageCount(chatMessage2,chatUser){
+      if(parseInt(toUserId)!=JSON.parse(chatMessage2.fromUser).number){
+        var li=$(".person"+JSON.parse(chatMessage2.fromUser).number);
+        var spanCount=li.find('.count').css("display","inline-block");
+        var count=parseInt(spanCount.html())+1;
+        console.log("sayısı:"+parseInt(spanCount.val()));
+        spanCount.html(count);
+
+        messageCountList=[];
+        for(var key in users){
+          var count=parseInt($(".person"+users[key].number).find(".count").text());
+          messageCountList.push(count);
+        }
+
+      }
+    }
+    function IsUsersOnline(){
+      setInterval(function (){
+        socket.emit('IsOnlineUsers', 'isOnline');
+      }, 15000);
+    }
+  </script>
+</html>
